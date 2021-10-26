@@ -5,3 +5,10 @@
     margin-bottom: 40px;
     border-bottom: 1px #545454 solid;
 }
+
+@media (max-width: 900px) {
+    .header {
+        height: 56px;
+        margin-bottom: 42px;
+    }
+}

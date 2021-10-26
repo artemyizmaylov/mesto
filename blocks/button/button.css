@@ -2,6 +2,7 @@
     border: none;
     padding: 0;
     cursor: pointer;
+    transition: 0.4s;
 }
 
 .button:hover {

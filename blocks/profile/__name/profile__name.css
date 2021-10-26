@@ -9,3 +9,11 @@
     margin: 0;
     grid-area: name;
 }
+
+@media (max-width: 700px) {
+    .profile__name {
+        font-size: 27px;
+        line-height: 33px;
+        text-align: center;
+    }
+}

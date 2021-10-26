@@ -1,4 +1,12 @@
 .page {
+    min-width: 320px;
     background-color: black;
-    padding: 45px 17px 60px 17px;
+    padding: 45px 0 60px 0;
+}
+
+@media (max-width: 900px) {
+    .page {
+        padding-top: 28px;
+        padding-bottom: 36px;
+    }
 }

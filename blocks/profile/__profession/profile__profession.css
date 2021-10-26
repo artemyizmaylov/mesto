@@ -9,3 +9,11 @@
     margin: 0;
     grid-area: profession;
 }
+
+@media (max-width: 700px) {
+    .profile__profession {
+        font-size: 14px;
+        line-height: 17px;
+        text-align: center;
+    }
+}
