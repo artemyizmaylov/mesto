@@ -1,0 +1,8 @@
+.profile__text {
+    display: grid;
+    grid-template-areas:
+        'name button-edit'
+        'profession profession';
+    align-items: baseline;
+    gap: 16px 18px;
+}
