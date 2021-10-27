@@ -11,3 +11,4 @@ buttonEdit.addEventListener('click', function () {
 buttonClose.addEventListener('click', function () {
     popup.classList.remove('popup_opened');
 })
+

@@ -4,6 +4,8 @@
     background-size: contain;
     width: 142px;
     height: 33px;
+
+    transition: 0.4s;
 }
 
 @media (max-width: 900px) {

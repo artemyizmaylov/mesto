@@ -5,6 +5,8 @@
     margin-bottom: 40px;
     padding-top: 45px;
     border-bottom: 1px #545454 solid;
+
+    transition: 0.4s;
 }
 
 @media (max-width: 900px) {
