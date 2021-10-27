@@ -1,6 +1,6 @@
 .button_type_add {
     background-image: url('../../../images/add-btn.svg');
-    background-color: black;
+    background-color: rgba(0, 0, 0, 0);
     background-repeat: no-repeat;
     background-size: cover;
     width: 150px;

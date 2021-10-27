@@ -1,8 +1,8 @@
 .button_type_edit {
     background-image: url('../../../images/edit-btn.svg');
-    background-color: black;
+    background-color: rgba(0, 0, 0, 0);
     width: 24px;
     height: 24px;
 
-    grid-area: button-edit;
+    grid-area: btn-edit;
 }

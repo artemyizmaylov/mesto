@@ -1,0 +1,19 @@
+.button_type_close {
+    width: 32px;
+    height: 32px;
+    background-image: url('../../../images/close-btn.svg');
+    background-color: rgba(0, 0, 0, 0);
+    background-size: contain;
+    background-repeat: no-repeat;
+
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: calc(100% + 8px);
+}
+
+@media (max-width: 414px) {
+    .button_type_close {
+        position: unset;
+        margin-bottom: 16px;
+    }
+}

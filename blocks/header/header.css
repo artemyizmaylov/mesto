@@ -3,6 +3,7 @@
     height: 74px;
     margin: 0 auto;
     margin-bottom: 40px;
+    padding-top: 45px;
     border-bottom: 1px #545454 solid;
 }
 
@@ -10,5 +11,6 @@
     .header {
         height: 56px;
         margin-bottom: 42px;
+        padding-top: 28px;
     }
 }

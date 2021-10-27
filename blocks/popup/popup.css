@@ -1,0 +1,16 @@
+.popup {
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    position: fixed;
+}
+
+.popup::after {
+    position: absolute;
+    content: '';
+    width: 100%;
+    height: 100%;
+    opacity: 50%;
+    background-color: black;
+    z-index: -1;
+}

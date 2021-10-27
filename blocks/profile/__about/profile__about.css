@@ -1,4 +1,4 @@
-.profile__profession {
+.profile__about {
     font-family: Inter;
     font-style: normal;
     font-weight: normal;
@@ -7,11 +7,11 @@
     color: white;
 
     margin: 0;
-    grid-area: profession;
+    grid-area: about;
 }
 
 @media (max-width: 700px) {
-    .profile__profession {
+    .profile__about {
         font-size: 14px;
         line-height: 17px;
         text-align: center;
