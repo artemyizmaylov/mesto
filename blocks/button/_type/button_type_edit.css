@@ -6,3 +6,10 @@
 
     grid-area: btn-edit;
 }
+
+@media (max-width: 750px) {
+    .button_type_edit {
+        width: 18px;
+        height: 18px;
+    }
+}
