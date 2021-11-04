@@ -1,0 +1,6 @@
+.place__like-button {
+    background-color: rgba(0, 0, 0, 0);
+    background-image: url('../../../images/like-disable.svg');
+    width: 22px;
+    height: 19px;
+}

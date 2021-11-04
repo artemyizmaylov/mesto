@@ -1,4 +1,4 @@
-.button_type_add {
+.profile__add-button {
     background-image: url('../../../images/add-btn.svg');
     background-color: rgba(0, 0, 0, 0);
     background-repeat: no-repeat;
@@ -8,7 +8,7 @@
 }
 
 @media (max-width: 750px) {
-    .button_type_add {
+    .profile__add-button {
         background-image: url('../../../images/add-btn-wide.svg');
         width: 282px;
     }
