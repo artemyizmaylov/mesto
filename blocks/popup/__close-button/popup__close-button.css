@@ -2,7 +2,7 @@
     width: 32px;
     height: 32px;
     background-image: url('../../../images/close-btn.svg');
-    background-color: rgba(0, 0, 0, 0);
+    background-color: transparent;
     background-size: contain;
     background-repeat: no-repeat;
 
