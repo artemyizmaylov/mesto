@@ -14,3 +14,9 @@
         line-height: 22px;
     }
 }
+
+@media (max-width: 414px) {
+    .popup__heading {
+        margin-bottom: 75px;
+    }
+}

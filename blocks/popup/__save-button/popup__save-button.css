@@ -19,3 +19,10 @@
         min-height: 48px;
     }
 }
+
+@media (max-width: 414px) {
+    .popup__save-button {
+        font-size: 14px;
+        line-height: 17px;
+    }
+}
