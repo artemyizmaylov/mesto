@@ -28,44 +28,10 @@
       </div>
       <ul class="places">
         <li class="place">
+          <button class="button place__trash-button" type="button"></button>
           <img src='./images/places/london.jpg' alt="Лондон" class="place__img">
           <div class="place__info">
             <h2 class="place__name">Лондон</h2>
-            <button class="button place__like-button" type="button"></button>
-          </div>
-        </li>
-        <li class="place">
-          <img src="./images/places/madrid.jpg" alt="Мадрид" class="place__img">
-          <div class="place__info">
-            <h2 class="place__name">Мадрид</h2>
-            <button class="button place__like-button"></button>
-          </div>
-        </li>
-        <li class="place">
-          <img src="./images/places/paris.jpg" alt="Париж" class="place__img">
-          <div class="place__info">
-            <h2 class="place__name">Париж</h2>
-            <button class="button place__like-button" type="button"></button>
-          </div>
-        </li>
-        <li class="place">
-          <img src="./images/places/san-francisco.jpg" alt="Сан Франциско" class="place__img">
-          <div class="place__info">
-            <h2 class="place__name">Сан Франциско</h2>
-            <button class="button place__like-button" type="button"></button>
-          </div>
-        </li>
-        <li class="place">
-          <img src="./images/places/tokyo.jpg" alt="Токио" class="place__img">
-          <div class="place__info">
-            <h2 class="place__name">Токио</h2>
-            <button class="button place__like-button" type="button"></button>
-          </div>
-        </li>
-        <li class="place">
-          <img src="./images/places/verona.jpg" alt="Верона" class="place__img">
-          <div class="place__info">
-            <h2 class="place__name">Верона</h2>
             <button class="button place__like-button" type="button"></button>
           </div>
         </li>
@@ -74,7 +40,7 @@
     <footer class="footer">
       <p class="footer__text">&copy; 2020 Mesto Russia</p>
     </footer>
-    <div class="popup">
+    <div class="popup profile-popup">
       <div class="popup__container">
         <button class="button popup__close-button" type="button"></button>
         <form class="popup__form" name="profile-info" method="post">
@@ -82,6 +48,17 @@
           <input type="text" name="profile-name" class="popup__input popup__input_type_name" placeholder="Имя">
           <input type="text" name="profile-about" class="popup__input popup__input_type_about" placeholder="О себе">
           <button class="button popup__save-button" type="submit">Сохранить</button>
+        </form>
+      </div>
+    </div>
+    <div class="popup place-popup">
+      <div class="popup__container">
+        <button class="button popup__close-button" type="button"></button>
+        <form class="popup__form" name="profile-info" method="post">
+          <h2 class="popup__heading">Новое место</h2>
+          <input type="text" name="profile-name" class="popup__input popup__input_type_place" placeholder="Название">
+          <input type="text" name="profile-about" class="popup__input popup__input_type_link" placeholder="Ссылка на картинку">
+          <button class="button popup__save-button" type="submit">Создать</button>
         </form>
       </div>
     </div>
