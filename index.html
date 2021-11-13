@@ -26,16 +26,7 @@
         </div>
         <button class="button profile__add-button" type="button"></button>
       </div>
-      <ul class="places">
-        <li class="place">
-          <button class="button place__trash-button" type="button"></button>
-          <img src='./images/places/london.jpg' alt="Лондон" class="place__img">
-          <div class="place__info">
-            <h2 class="place__name">Лондон</h2>
-            <button class="button place__like-button" type="button"></button>
-          </div>
-        </li>
-      </ul>
+      <ul class="places"></ul>
     </main>
     <footer class="footer">
       <p class="footer__text">&copy; 2020 Mesto Russia</p>
@@ -54,15 +45,32 @@
     <div class="popup place-popup">
       <div class="popup__container">
         <button class="button popup__close-button" type="button"></button>
-        <form class="popup__form" name="profile-info" method="post">
+        <form class="popup__form" name="place-info" method="post">
           <h2 class="popup__heading">Новое место</h2>
-          <input type="text" name="profile-name" class="popup__input popup__input_type_place" placeholder="Название">
-          <input type="text" name="profile-about" class="popup__input popup__input_type_link" placeholder="Ссылка на картинку">
+          <input type="text" name="place-name" class="popup__input popup__input_type_place" placeholder="Название">
+          <input type="text" name="place-link" class="popup__input popup__input_type_link" placeholder="Ссылка на картинку">
           <button class="button popup__save-button" type="submit">Создать</button>
         </form>
       </div>
     </div>
+    <div class="popup image-popup">
+      <div class="image-popup__container">
+        <button class="button popup__close-button" type="button"></button>
+        <img src="https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg" alt="Фото" class="image-popup__img">
+        <h2 class="popup__heading image-popup__heading">Фото</h2>
+      </div>
+    </div>
   </div>
+  <template id="place">
+    <li class="place">
+      <button class="button place__trash-button" type="button"></button>
+      <img src="" alt="Фото" class="place__img">
+      <div class="place__info">
+        <h2 class="place__name"></h2>
+        <button class="button place__like-button" type="button"></button>
+      </div>
+    </li>
+  </template>
   <script src="./scripts/index.js"></script>
 </body>
 

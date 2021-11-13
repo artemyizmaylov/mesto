@@ -1,0 +1,11 @@
+.image-popup__container {
+    position: relative;
+}
+
+@media (max-width: 414px) {
+    .image-popup__container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+}
