@@ -1,0 +1,6 @@
+.image-popup {}
+
+.image-popup::after {
+    background-color: black;
+    opacity: 90%;
+}
