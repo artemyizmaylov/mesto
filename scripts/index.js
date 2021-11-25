@@ -61,7 +61,7 @@ function activateButtons(buttonLike, buttonTrash, image) {
     buttonTrash.addEventListener('click', () => {
         const card = buttonTrash.closest('.place');
         card.remove();
-    })
+    });
 
     buttonLike.addEventListener('click', () => {
         const active = 'place__like-button_active';
@@ -70,7 +70,7 @@ function activateButtons(buttonLike, buttonTrash, image) {
         } else {
             buttonLike.classList.remove(active);
         }
-    })
+    });
 
     image.addEventListener('click', () => {
         popupImagePhoto.src = image.src;
@@ -115,7 +115,7 @@ function addNewCard(evt) {
     const card = {
         name: inputPlace.value,
         link: inputLink.value
-    }
+    };
 
     cards.prepend(createCard(card));
     closePopup(popupPlace);
