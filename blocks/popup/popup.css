@@ -22,3 +22,7 @@
     background-color: black;
     z-index: -1;
 }
+
+.image-popup::after {
+    opacity: 90%;
+}
