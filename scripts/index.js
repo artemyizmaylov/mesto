@@ -118,6 +118,10 @@ function addNewCard(evt) {
     };
 
     cards.prepend(createCard(card));
+
+    inputPlace.value = '';
+    inputLink.value = '';
+
     closePopup(popupPlace);
 };
 
