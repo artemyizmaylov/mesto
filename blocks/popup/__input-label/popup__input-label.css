@@ -1,0 +1,14 @@
+.popup__input-label {
+    min-height: 44px;
+    margin-bottom: 13px;
+}
+
+.popup__input-label:last-of-type {
+    margin-bottom: 31px;
+}
+
+@media (max-width: 414px) {
+    .popup__input-label:last-of-type {
+        margin-bottom: 28px;
+    }
+}
