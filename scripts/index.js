@@ -25,6 +25,9 @@ const initialCards = [{
     }
 ];
 
+// Массив попапов
+const popups = document.querySelectorAll('.popup');
+
 // Переменные для работы с карточками
 const cardTemplate = document.querySelector('#place').content;
 const cards = document.querySelector('.places');
@@ -38,41 +41,69 @@ const buttonAdd = document.querySelector('.profile__add-button');
 
 // Переменные для работы с попапом профиля
 const popupProfile = document.querySelector('.profile-popup');
+
 const formProfile = popupProfile.querySelector('.popup__form');
 const inputName = formProfile.querySelector('.popup__input_type_name');
 const inputAbout = formProfile.querySelector('.popup__input_type_about');
-const buttonCloseEdit = popupProfile.querySelector('.popup__close-button');
 
 // Переменные для работы с попапом карточек
 const popupPlace = document.querySelector('.place-popup');
+
 const formCards = popupPlace.querySelector('.popup__form');
 const inputPlace = formCards.querySelector('.popup__input_type_place');
 const inputLink = formCards.querySelector('.popup__input_type_link');
-const buttonClosePlace = popupPlace.querySelector('.popup__close-button');
 
 // Переменные для отображения карточек
 const popupImage = document.querySelector('.image-popup');
+
 const popupImagePhoto = popupImage.querySelector('.popup__img');
 const popupImageName = popupImage.querySelector('.popup__img-name');
-const buttonCloseImage = popupImage.querySelector('.popup__close-button');
 
-// Функции открытия и закрытия попапов
-const openPopup = popup => popup.classList.add('popup_opened');
-const closePopup = popup => popup.classList.remove('popup_opened');
+// Функции попапов
+const keydownCheck = evt => {
+    if (evt.key === 'Escape') {
+        evt.preventDefault();
 
-// Функция активации кнопок на карточках
-const removeCard = evt => {
-    const card = evt.target.closest('.place');
-    card.remove();
-};
+        const popup = document.querySelector('.popup_opened');
 
-const like = evt => {
-    if (evt.target.classList.contains('button')) {
-        evt.target.classList.toggle('place__like-button_active');
+        closePopup(popup);
     }
 };
 
-const openPhoto = evt => {
+const openPopup = popup => {
+    document.addEventListener('keydown', keydownCheck);
+    popup.classList.add('popup_opened');
+};
+
+const closePopup = popup => {
+    document.removeEventListener('keydown', keydownCheck);
+    popup.classList.remove('popup_opened');
+};
+
+const openProfileFrom = () => {
+    inputName.value = profileName.textContent;
+    inputAbout.value = profileAbout.textContent;
+
+    openPopup(popupProfile);
+};
+
+const updateProfile = evt => {
+    evt.preventDefault();
+
+    profileName.textContent = inputName.value;
+    profileAbout.textContent = inputAbout.value;
+
+    closePopup(evt.target.closest('.popup'));
+};
+
+const openPlaceForm = () => {
+    inputPlace.value = '';
+    inputLink.value = '';
+
+    openPopup(popupPlace);
+};
+
+const openImage = evt => {
     popupImagePhoto.src = evt.target.src;
     popupImagePhoto.alt = evt.target.alt;
     popupImageName.textContent = evt.target.alt;
@@ -80,14 +111,29 @@ const openPhoto = evt => {
     openPopup(popupImage);
 };
 
-function activateButtons(buttonLike, buttonTrash, photo) {
-    buttonTrash.addEventListener('click', removeCard);
-    buttonLike.addEventListener('click', like)
-    photo.addEventListener('click', openPhoto);
+const checkPopupForClose = evt => {
+    if (evt.target.classList.contains('button') || evt.target.classList.contains('popup')) {
+        closePopup(evt.target.closest('.popup'));
+    }
 };
 
-// Функция рендера карточек
-function createCard(item) {
+// Функции карточек
+const removeCard = evt => {
+    const card = evt.target.closest('.place');
+    card.remove();
+};
+
+const like = evt => {
+    evt.target.classList.toggle('place__like-button_active');
+};
+
+const activateCardButtons = (buttonLike, buttonTrash, image) => {
+    buttonTrash.addEventListener('click', removeCard);
+    buttonLike.addEventListener('click', like)
+    image.addEventListener('click', openImage);
+};
+
+const createCard = item => {
     const card = cardTemplate.cloneNode(true);
     const buttonLike = card.querySelector('.place__like-button');
     const buttonTrash = card.querySelector('.place__trash-button');
@@ -98,23 +144,12 @@ function createCard(item) {
     image.src = item.link;
     image.alt = item.name;
 
-    activateButtons(buttonLike, buttonTrash, image);
+    activateCardButtons(buttonLike, buttonTrash, image);
 
     return card;
 };
 
-// Функция обновления информации профиля
-function updateProfile(evt) {
-    evt.preventDefault();
-
-    profileName.textContent = inputName.value;
-    profileAbout.textContent = inputAbout.value;
-
-    closePopup(evt.target.closest('.popup'));
-};
-
-// Функция обновления информации карточек
-function addNewCard(evt) {
+const addNewCard = evt => {
     evt.preventDefault();
 
     const card = {
@@ -124,70 +159,31 @@ function addNewCard(evt) {
 
     cards.prepend(createCard(card));
 
-    inputPlace.value = '';
-    inputLink.value = '';
-
     closePopup(evt.target.closest('.popup'));
 };
 
-// Обработчики событий попапа профиля
-buttonEdit.addEventListener('click', (evt) => {
-    inputName.value = profileName.textContent;
-    inputAbout.value = profileAbout.textContent;
+// Обработчики событий
+const activateListeners = (popupsList, editBtn, addBtn, profileForm, cardsForm) => {
+    editBtn.addEventListener('click', openProfileFrom);
+    addBtn.addEventListener('click', openPlaceForm);
+    profileForm.addEventListener('submit', updateProfile);
+    cardsForm.addEventListener('submit', addNewCard);
 
-    openPopup(popupProfile);
-});
+    popupsList.forEach(popup => {
+        popup.addEventListener('click', checkPopupForClose);
+    });
+};
 
-buttonCloseEdit.addEventListener('click', (evt) => {
-    closePopup(popupProfile);
-});
+// Активация всех кнопок на странице
+const enableButtons = () => {
+    activateListeners(popups, buttonEdit, buttonAdd, formProfile, formCards);
+};
 
-formProfile.addEventListener('submit', updateProfile);
+// Рендер карточек
+const renderCards = () => {
+    initialCards.forEach(card => cards.append(createCard(card)));
+};
 
-// Обработчики событий попапа редактирования карточек
-buttonAdd.addEventListener('click', (evt) => {
-    openPopup(popupPlace);
-});
-
-buttonClosePlace.addEventListener('click', (evt) => {
-    closePopup(popupPlace);
-});
-
-// Обработчики событий попапа просмотра фотографий
-buttonCloseImage.addEventListener('click', (evt) => {
-    closePopup(popupImage);
-});
-
-popupImage.addEventListener('click', (evt) => {
-    if (evt.target.classList.contains('image-popup')) {
-        closePopup(popupImage);
-    }
-});
-
-popupProfile.addEventListener('click', (evt) => {
-    if (evt.target.classList.contains('profile-popup')) {
-        closePopup(popupProfile);
-    }
-});
-
-popupPlace.addEventListener('click', (evt) => {
-    if (evt.target.classList.contains('place-popup')) {
-        closePopup(popupPlace);
-    }
-});
-
-document.addEventListener('keydown', (evt) => {
-
-    if (evt.key === 'Escape') {
-        evt.preventDefault();
-
-        closePopup(popupPlace);
-        closePopup(popupImage);
-        closePopup(popupProfile);
-    }
-});
-
-formCards.addEventListener('submit', addNewCard);
-
-// Рендер стартовых карточек
-initialCards.forEach(card => cards.append(createCard(card)));
+// Инициализация страницы
+renderCards();
+enableButtons();
