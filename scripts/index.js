@@ -141,18 +141,6 @@ const addNewCard = evt => {
     closePopup(evt.target.closest('.popup'));
 };
 
-// Обработчики событий
-const activateListeners = (popupsList, editBtn, addBtn, profileForm, cardsForm) => {
-    editBtn.addEventListener('click', openProfileFrom);
-    addBtn.addEventListener('click', openCardsForm);
-    profileForm.addEventListener('submit', updateProfile);
-    cardsForm.addEventListener('submit', addNewCard);
-
-    popupsList.forEach(popup => {
-        popup.addEventListener('click', checkPopupForClose);
-    });
-};
-
 // Рендер карточек
 const renderCards = () => {
     initialCards.forEach((item) => {
@@ -160,6 +148,16 @@ const renderCards = () => {
         insertCard('last', card);
     });
 };
+
+// Обработчики событий
+buttonEdit.addEventListener('click', openProfileFrom);
+buttonAdd.addEventListener('click', openCardsForm);
+formProfile.addEventListener('submit', updateProfile);
+formCards.addEventListener('submit', addNewCard);
+
+popups.forEach(popup => {
+    popup.addEventListener('click', checkPopupForClose);
+});
 
 // Инициализация страницы
 renderCards();
