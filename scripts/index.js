@@ -161,4 +161,3 @@ popups.forEach(popup => {
 
 // Инициализация страницы
 renderCards();
-activateListeners(popups, buttonEdit, buttonAdd, formProfile, formCards);
