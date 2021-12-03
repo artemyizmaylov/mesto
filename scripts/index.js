@@ -1,30 +1,3 @@
-// Массив стартовых карточек
-const initialCards = [{
-        name: 'Архыз',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-    },
-    {
-        name: 'Челябинская область',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-    },
-    {
-        name: 'Иваново',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-    },
-    {
-        name: 'Камчатка',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-    },
-    {
-        name: 'Холмогорский район',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-    },
-    {
-        name: 'Байкал',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-    }
-];
-
 // Массив попапов
 const popups = document.querySelectorAll('.popup');
 
@@ -60,7 +33,7 @@ const popupImagePhoto = popupImage.querySelector('.popup__img');
 const popupImageName = popupImage.querySelector('.popup__img-name');
 
 // Функции попапов
-const keydownCheck = evt => {
+const checkKeydown = evt => {
     if (evt.key === 'Escape') {
         evt.preventDefault();
 
@@ -71,12 +44,12 @@ const keydownCheck = evt => {
 };
 
 const openPopup = popup => {
-    document.addEventListener('keydown', keydownCheck);
+    document.addEventListener('keydown', checkKeydown);
     popup.classList.add('popup_opened');
 };
 
 const closePopup = popup => {
-    document.removeEventListener('keydown', keydownCheck);
+    document.removeEventListener('keydown', checkKeydown);
     popup.classList.remove('popup_opened');
 };
 
@@ -96,10 +69,8 @@ const updateProfile = evt => {
     closePopup(evt.target.closest('.popup'));
 };
 
-const openPlaceForm = () => {
-    inputPlace.value = '';
-    inputLink.value = '';
-
+const openCardsForm = () => {
+    formCards.reset();
     openPopup(popupPlace);
 };
 
@@ -149,6 +120,14 @@ const createCard = item => {
     return card;
 };
 
+const insertCard = (position, card) => {
+    if (position === 'first') {
+        cards.prepend(card);
+    } else if (position === 'last') {
+        cards.append(card);
+    };
+};
+
 const addNewCard = evt => {
     evt.preventDefault();
 
@@ -156,8 +135,8 @@ const addNewCard = evt => {
         name: inputPlace.value,
         link: inputLink.value
     };
-
-    cards.prepend(createCard(card));
+    const newCard = createCard(card);
+    insertCard('first', newCard);
 
     closePopup(evt.target.closest('.popup'));
 };
@@ -165,7 +144,7 @@ const addNewCard = evt => {
 // Обработчики событий
 const activateListeners = (popupsList, editBtn, addBtn, profileForm, cardsForm) => {
     editBtn.addEventListener('click', openProfileFrom);
-    addBtn.addEventListener('click', openPlaceForm);
+    addBtn.addEventListener('click', openCardsForm);
     profileForm.addEventListener('submit', updateProfile);
     cardsForm.addEventListener('submit', addNewCard);
 
@@ -174,16 +153,14 @@ const activateListeners = (popupsList, editBtn, addBtn, profileForm, cardsForm) 
     });
 };
 
-// Активация всех кнопок на странице
-const enableButtons = () => {
-    activateListeners(popups, buttonEdit, buttonAdd, formProfile, formCards);
-};
-
 // Рендер карточек
 const renderCards = () => {
-    initialCards.forEach(card => cards.append(createCard(card)));
+    initialCards.forEach((item) => {
+        const card = createCard(item);
+        insertCard('last', card);
+    });
 };
 
 // Инициализация страницы
 renderCards();
-enableButtons();
+activateListeners(popups, buttonEdit, buttonAdd, formProfile, formCards);

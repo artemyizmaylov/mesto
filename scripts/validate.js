@@ -1,28 +1,20 @@
-const selectors = {
-    formSelector: '.popup__form',
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__save-button',
-    inactiveButtonClass: 'popup__save-button_disabled',
-    inputErrorClass: 'popup__input_invalid'
-};
-
-const showInputError = (obj, formElement, inputElement, errorMessage) => {
+const showInputError = (settings, formElement, inputElement, errorMessage) => {
     const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-    inputElement.classList.add(`${obj.inputErrorClass}`);
+    inputElement.classList.add(`${settings.inputErrorClass}`);
     errorElement.textContent = errorMessage;
 };
 
-const hideInputError = (obj, formElement, inputElement) => {
+const hideInputError = (settings, formElement, inputElement) => {
     const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-    inputElement.classList.remove(`${obj.inputErrorClass}`);
+    inputElement.classList.remove(`${settings.inputErrorClass}`);
     errorElement.textContent = '';
 };
 
-const checkInputValidity = (obj, formElement, inputElement) => {
+const checkInputValidity = (settings, formElement, inputElement) => {
     if (!inputElement.validity.valid) {
-        showInputError(obj, formElement, inputElement, inputElement.validationMessage);
+        showInputError(settings, formElement, inputElement, inputElement.validationMessage);
     } else {
-        hideInputError(obj, formElement, inputElement);
+        hideInputError(settings, formElement, inputElement);
     }
 };
 
@@ -32,35 +24,47 @@ const hasInvalidInput = (inputList) => {
     });
 };
 
-const toggleButtonState = (obj, inputList, buttonElement) => {
+const enableButton = (settings, buttonElement) => {
+    buttonElement.classList.remove(`${settings.inactiveButtonClass}`);
+    buttonElement.removeAttribute("disabled", "disabled");
+};
+
+const disableButton = (settings, buttonElement) => {
+    buttonElement.classList.add(`${settings.inactiveButtonClass}`);
+    buttonElement.setAttribute("disabled", "disabled");
+};
+
+const toggleButtonState = (settings, inputList, buttonElement) => {
     if (hasInvalidInput(inputList)) {
-        buttonElement.classList.add(`${obj.inactiveButtonClass}`);
-        buttonElement.setAttribute("disabled", "disabled");
+        disableButton(settings, buttonElement);
     } else {
-        buttonElement.classList.remove(`${obj.inactiveButtonClass}`);
-        buttonElement.removeAttribute("disabled", "disabled");
+        enableButton(settings, buttonElement);
     }
 };
 
-const setEventListeners = (obj, formElement) => {
-    const inputList = Array.from(formElement.querySelectorAll(`${obj.inputSelector}`));
-    const buttonElement = formElement.querySelector(`${obj.submitButtonSelector}`);
+const setEventListeners = (settings, formElement) => {
+    const inputList = Array.from(formElement.querySelectorAll(`${settings.inputSelector}`));
+    const buttonElement = formElement.querySelector(`${settings.submitButtonSelector}`);
 
-    toggleButtonState(obj, inputList, buttonElement);
+    toggleButtonState(settings, inputList, buttonElement);
 
     inputList.forEach((inputElement) => {
         inputElement.addEventListener('input', function() {
-            checkInputValidity(obj, formElement, inputElement);
-            toggleButtonState(obj, inputList, buttonElement);
+            checkInputValidity(settings, formElement, inputElement);
+            toggleButtonState(settings, inputList, buttonElement);
+        });
+
+        formElement.addEventListener('reset', function() {
+            disableButton(settings, buttonElement);
         });
     });
 };
 
-const enableValidation = obj => {
-    const formList = Array.from(document.querySelectorAll(`${obj.formSelector}`));
+const enableValidation = settings => {
+    const formList = Array.from(document.querySelectorAll(`${settings.formSelector}`));
     formList.forEach((formElement) => {
-        setEventListeners(obj, formElement);
+        setEventListeners(settings, formElement);
     });
 };
 
-enableValidation(selectors);
+enableValidation(settings);
