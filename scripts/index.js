@@ -6,7 +6,7 @@ import {
 } from "./utils.js";
 
 export {
-    checkKeydown
+    openPopup
 };
 
 // Массивы попапов и форм
@@ -37,6 +37,9 @@ const popupPlace = document.querySelector('.place-popup');
 const formCards = popupPlace.querySelector('.popup__form');
 const inputPlace = formCards.querySelector('.popup__input_type_place');
 const inputLink = formCards.querySelector('.popup__input_type_link');
+
+// Попап изображения карточки
+const popupImage = document.querySelector('.image-popup');
 
 // Функции попапов
 const checkKeydown = evt => {
@@ -102,7 +105,7 @@ const addNewCard = evt => {
         name: inputPlace.value,
         link: inputLink.value
     };
-    const card = new Card(items, cardTemplate).create();
+    const card = new Card(items, cardTemplate, popupImage).create();
     insertCard('first', card);
 
     closePopup(formCards);
