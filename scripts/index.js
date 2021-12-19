@@ -1,8 +1,20 @@
-// Массив попапов
+import Card from './Card.js';
+import FormValidator from "./FormValidator.js";
+import {
+    settings,
+    initialCards
+} from "./utils.js";
+
+export {
+    checkKeydown
+};
+
+// Массивы попапов и форм
 const popups = document.querySelectorAll('.popup');
+const forms = document.querySelectorAll('.popup__form');
 
 // Переменные для работы с карточками
-const cardTemplate = document.querySelector('#place').content;
+const cardTemplate = 'place';
 const cards = document.querySelector('.places');
 
 // Переменные для работы с профилем
@@ -12,25 +24,19 @@ const profileAbout = document.querySelector('.profile__about');
 const buttonEdit = document.querySelector('.profile__edit-button');
 const buttonAdd = document.querySelector('.profile__add-button');
 
-// Переменные для работы с попапом профиля
+// Переменные для работы с попапом формы профиля
 const popupProfile = document.querySelector('.profile-popup');
 
 const formProfile = popupProfile.querySelector('.popup__form');
 const inputName = formProfile.querySelector('.popup__input_type_name');
 const inputAbout = formProfile.querySelector('.popup__input_type_about');
 
-// Переменные для работы с попапом карточек
+// Переменные для работы с попапом формы карточек
 const popupPlace = document.querySelector('.place-popup');
 
 const formCards = popupPlace.querySelector('.popup__form');
 const inputPlace = formCards.querySelector('.popup__input_type_place');
 const inputLink = formCards.querySelector('.popup__input_type_link');
-
-// Переменные для отображения карточек
-const popupImage = document.querySelector('.image-popup');
-
-const popupImagePhoto = popupImage.querySelector('.popup__img');
-const popupImageName = popupImage.querySelector('.popup__img-name');
 
 // Функции попапов
 const checkKeydown = evt => {
@@ -66,20 +72,12 @@ const updateProfile = evt => {
     profileName.textContent = inputName.value;
     profileAbout.textContent = inputAbout.value;
 
-    closePopup(evt.target.closest('.popup'));
+    closePopup(popupProfile);
 };
 
 const openCardsForm = () => {
     formCards.reset();
     openPopup(popupPlace);
-};
-
-const openImage = evt => {
-    popupImagePhoto.src = evt.target.src;
-    popupImagePhoto.alt = evt.target.alt;
-    popupImageName.textContent = evt.target.alt;
-
-    openPopup(popupImage);
 };
 
 const checkPopupForClose = evt => {
@@ -89,37 +87,6 @@ const checkPopupForClose = evt => {
 };
 
 // Функции карточек
-const removeCard = evt => {
-    const card = evt.target.closest('.place');
-    card.remove();
-};
-
-const like = evt => {
-    evt.target.classList.toggle('place__like-button_active');
-};
-
-const activateCardButtons = (buttonLike, buttonTrash, image) => {
-    buttonTrash.addEventListener('click', removeCard);
-    buttonLike.addEventListener('click', like)
-    image.addEventListener('click', openImage);
-};
-
-const createCard = item => {
-    const card = cardTemplate.cloneNode(true);
-    const buttonLike = card.querySelector('.place__like-button');
-    const buttonTrash = card.querySelector('.place__trash-button');
-    const image = card.querySelector('.place__img');
-    const name = card.querySelector('.place__name');
-
-    name.textContent = item.name;
-    image.src = item.link;
-    image.alt = item.name;
-
-    activateCardButtons(buttonLike, buttonTrash, image);
-
-    return card;
-};
-
 const insertCard = (position, card) => {
     if (position === 'first') {
         cards.prepend(card);
@@ -131,23 +98,31 @@ const insertCard = (position, card) => {
 const addNewCard = evt => {
     evt.preventDefault();
 
-    const card = {
+    const items = {
         name: inputPlace.value,
         link: inputLink.value
     };
-    const newCard = createCard(card);
-    insertCard('first', newCard);
+    const card = new Card(items, cardTemplate).create();
+    insertCard('first', card);
 
-    closePopup(evt.target.closest('.popup'));
+    closePopup(formCards);
 };
 
-// Рендер карточек
+// Рендер стартовых карточек
 const renderCards = () => {
     initialCards.forEach((item) => {
-        const card = createCard(item);
+        const card = new Card(item, cardTemplate).create();
         insertCard('last', card);
     });
 };
+
+// Настройка форм
+const setupForms = () => {
+    forms.forEach(form => {
+        const validation = new FormValidator(settings, form);
+        validation.enableValidation();
+    });
+}
 
 // Обработчики событий
 buttonEdit.addEventListener('click', openProfileFrom);
@@ -161,3 +136,4 @@ popups.forEach(popup => {
 
 // Инициализация страницы
 renderCards();
+setupForms();
