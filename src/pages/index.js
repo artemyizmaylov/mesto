@@ -14,6 +14,7 @@ import {
     editProfileButton
 } from "../utils/constants.js"
 
+import './index.css';
 
 // Основная логика
 const userInfo = new UserInfo('profile__name', 'profile__about');
