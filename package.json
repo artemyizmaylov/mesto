@@ -1,0 +1,20 @@
+{
+  "name": "mesto",
+  "version": "1.0.0",
+  "description": "Это третья обширная работа, предоставленная Яндекс.Практикумом. В ней я впервые начал кодить на JS. Это первые шаги в программировании. Помимо всего прочего, это был первый проект, который я делал с использованием веток ГИТа. Не все вещи я осознал на момент публикации этого проекта, но время еще есть!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/artemyizmaylov/mesto.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/artemyizmaylov/mesto/issues"
+  },
+  "homepage": "https://github.com/artemyizmaylov/mesto#readme"
+}

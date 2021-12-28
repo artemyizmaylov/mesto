@@ -33,3 +33,7 @@ export const initialCards = [{
         link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
     }
 ];
+
+export const forms = document.querySelectorAll('.popup__form');
+export const addCardButton = document.querySelector('.profile__add-button');
+export const editProfileButton = document.querySelector('.profile__edit-button');
