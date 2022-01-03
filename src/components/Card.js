@@ -5,8 +5,8 @@ export default class Card {
     }, selector) {
         this._name = items.name;
         this._link = items.link;
-        this._handleCardClick = handleCardClick;
         this._selector = selector;
+        this._handleCardClick = handleCardClick;
     }
 
     _getTemplate() {

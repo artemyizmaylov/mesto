@@ -13,13 +13,16 @@ export default class Section {
         this._container.append(element);
     }
 
+    prependItem(element) {
+        this._container.prepend(element);
+    }
+
     clear() {
         this._container.innerHTML = '';
     }
 
     render() {
         this.clear();
-
         this._items.forEach(item => {
             this._renderer(item);
         });
