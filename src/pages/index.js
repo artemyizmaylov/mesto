@@ -70,7 +70,9 @@ const profilePopup = new PopupWithForm({
 
 const avatarPopup = new PopupWithForm({
     submit: (values) => {
-        userInfo.setAvatar(values['link']);
+        userInfo.setUserInfo({
+            avatar: values['link']
+        })
     }
 }, 'avatar-popup');
 
