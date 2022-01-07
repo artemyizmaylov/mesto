@@ -1,4 +1,4 @@
-.popup__save-button {
+.popup__confirm-button {
     font-family: Inter, Arial, Helvetica, sans-serif;
     font-style: normal;
     font-weight: normal;
@@ -15,13 +15,13 @@
 }
 
 @media (max-width: 700px) {
-    .popup__save-button {
+    .popup__confirm-button {
         min-height: 46px;
     }
 }
 
 @media (max-width: 414px) {
-    .popup__save-button {
+    .popup__confirm-button {
         font-size: 14px;
         line-height: 17px;
     }

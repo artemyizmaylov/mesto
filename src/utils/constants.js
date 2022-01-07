@@ -2,8 +2,8 @@
 export const settings = {
     formSelector: '.popup__form',
     inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__save-button',
-    inactiveButtonClass: 'popup__save-button_disabled',
+    submitButtonSelector: '.popup__confirm-button',
+    inactiveButtonClass: 'popup__confirm-button_disabled',
     inputErrorClass: 'popup__input_invalid'
 };
 
