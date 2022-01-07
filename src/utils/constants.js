@@ -37,3 +37,4 @@ export const initialCards = [{
 export const forms = document.querySelectorAll('.popup__form');
 export const addCardButton = document.querySelector('.profile__add-button');
 export const editProfileButton = document.querySelector('.profile__edit-button');
+export const editAvatarButton = document.querySelector('.profile__avatar-container');

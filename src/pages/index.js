@@ -10,7 +10,8 @@ import {
     forms,
     settings,
     addCardButton,
-    editProfileButton
+    editProfileButton,
+    editAvatarButton
 } from "../utils/constants.js";
 
 import './index.css';
@@ -37,7 +38,10 @@ const createCard = (item) => {
     return cardElement.create();
 }
 
-const userInfo = new UserInfo('profile__name', 'profile__about');
+const userInfo = new UserInfo('profile__name',
+    'profile__about',
+    'profile__avatar');
+
 const imagePopup = new PopupWithImage('image-popup');
 
 const cards = new Section({
@@ -49,8 +53,8 @@ const cards = new Section({
 }, 'places');
 
 const placePopup = new PopupWithForm({
-    submit: (item) => {
-        const card = createCard(item);
+    submit: (values) => {
+        const card = createCard(values);
         cards.prependItem(card);
     }
 }, 'place-popup');
@@ -64,6 +68,11 @@ const profilePopup = new PopupWithForm({
     }
 }, 'profile-popup');
 
+const avatarPopup = new PopupWithForm({
+    submit: (values) => {
+        userInfo.setAvatar(values['link']);
+    }
+}, 'avatar-popup');
 
 // Слушатели
 editProfileButton.addEventListener('click', () => {
@@ -75,8 +84,13 @@ addCardButton.addEventListener('click', () => {
     placePopup.open();
 });
 
+editAvatarButton.addEventListener('click', () => {
+    avatarPopup.open();
+})
+
 profilePopup.setEventListeners();
 placePopup.setEventListeners();
+avatarPopup.setEventListeners();
 imagePopup.setEventListeners();
 
 // Инициализация страницы
