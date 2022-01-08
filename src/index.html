@@ -103,10 +103,21 @@
 
   </div>
 
+  <style>
+    .place__image-container {
+      width: 100%;
+      height: 282px;
+      overflow: hidden;
+      object-fit: cover;
+    }
+  </style>
+
   <template id="place">
     <li class="place">
       <button class="button place__trash-button" type="button"></button>
-      <img src="#" alt="#" class="place__img">
+      <div class="place__image-container">
+        <img src="#" alt="#" class="place__img">
+      </div>
       <div class="place__info">
         <h2 class="place__name"></h2>
         <div class="place__like">
