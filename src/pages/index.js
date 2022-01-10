@@ -17,43 +17,7 @@ import {
 
 import './index.css';
 
-// Основная логика
-export const api = new Api({
-    baseUrl: "https://mesto.nomoreparties.co/v1/cohort-16",
-    headers: {
-        authorization: "e8e5e3a7-8ba0-46eb-8d27-e0f2fc68826d",
-        'Content-Type': 'application/json'
-    },
-});
-
-export const userInfo = new UserInfo(
-    'profile__name',
-    'profile__about',
-    'profile__avatar'
-);
-
-const imagePopup = new PopupWithImage('image-popup');
-
-const placePopup = new PopupWithForm({
-    submit: (values) => {
-        api.addCard(values)
-    }
-}, 'place-popup');
-
-const profilePopup = new PopupWithForm({
-    submit: (data) => {
-        userInfo.setUserInfo(data);
-        api.setUser(userInfo.getUserInfo());
-    }
-}, 'profile-popup');
-
-const avatarPopup = new PopupWithForm({
-    submit: (data) => {
-        userInfo.setUserInfo(data);
-        api.setUserAvatar(userInfo.getUserInfo());
-    }
-}, 'avatar-popup');
-
+// Функции
 function setUpForms() {
     forms.forEach(form => {
         const validation = new FormValidator(settings, form);
@@ -74,6 +38,56 @@ function createCard(item) {
 
     return cardElement.create();
 }
+
+// Основная логика
+export const api = new Api({
+    baseUrl: "https://mesto.nomoreparties.co/v1/cohort-16",
+    headers: {
+        authorization: "e8e5e3a7-8ba0-46eb-8d27-e0f2fc68826d",
+        'Content-Type': 'application/json'
+    },
+});
+
+export const userInfo = new UserInfo(
+    'profile__name',
+    'profile__about',
+    'profile__avatar'
+);
+
+const cards = new Section({
+    items: api.getCards(),
+    renderer: (item) => {
+        cards.addItem(createCard(item))
+    }
+}, 'places');
+
+export const confirmPopup = new ConfirmPopup('confirm-popup');
+
+const imagePopup = new PopupWithImage('image-popup');
+
+const placePopup = new PopupWithForm({
+    submit: (values) => {
+        api.addCard(values)
+            .then(res => {
+                cards.prependItem(createCard(res));
+            })
+    }
+}, 'place-popup');
+
+const profilePopup = new PopupWithForm({
+    submit: (data) => {
+        userInfo.setUserInfo(data);
+        api.setUser(userInfo.getUserInfo())
+    }
+}, 'profile-popup');
+
+const avatarPopup = new PopupWithForm({
+    submit: (data) => {
+        userInfo.setUserInfo(data);
+        api.setUserAvatar(userInfo.getUserInfo())
+    }
+}, 'avatar-popup');
+
 // Слушатели
 editProfileButton.addEventListener('click', () => {
     profilePopup.setInputValues(userInfo.getUserInfo());
@@ -88,9 +102,11 @@ editAvatarButton.addEventListener('click', () => {
     avatarPopup.open();
 })
 
+
 profilePopup.setEventListeners();
 placePopup.setEventListeners();
 avatarPopup.setEventListeners();
+confirmPopup.setEventListeners();
 imagePopup.setEventListeners();
 
 // Инициализация страницы
@@ -98,17 +114,5 @@ api.gerUser()
     .then(data => {
         userInfo.setUserInfo(data);
     })
-
-api.getCards()
-    .then(data => {
-        const initialCards = new Section({
-            items: data,
-            renderer: (item) => {
-                initialCards.addItem(createCard(item));
-            }
-        }, 'places');
-        initialCards.render();
-    });
-
-
+cards.render();
 setUpForms();
