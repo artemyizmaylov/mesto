@@ -12,13 +12,16 @@ export default class UserInfo {
         return {
             name: this._name.textContent,
             about: this._about.textContent,
+            avatar: this._avatar.src,
+            _id: this._id
         };
     }
 
     setUserInfo({
         name,
         about,
-        avatar
+        avatar,
+        _id
     }) {
         if (name, about) {
             this._name.textContent = name;
@@ -27,5 +30,6 @@ export default class UserInfo {
         if (avatar) {
             this._avatar.src = avatar;
         }
+        this._id = _id;
     }
 }
