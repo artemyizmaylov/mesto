@@ -67,24 +67,28 @@ const imagePopup = new PopupWithImage('image-popup');
 
 const placePopup = new PopupWithForm({
     submit: (values) => {
+        placePopup.renderLoading(true);
         api.addCard(values)
-            .then(res => {
-                cards.prependItem(createCard(res));
-            })
+            .then(res => cards.prependItem(createCard(res)))
+            .finally(placePopup.renderLoading(false, 'Создать'))
     }
 }, 'place-popup');
 
 const profilePopup = new PopupWithForm({
     submit: (data) => {
-        userInfo.setUserInfo(data);
-        api.setUser(userInfo.getUserInfo())
+        profilePopup.renderLoading(true);
+        api.setUser(data)
+            .then(res => userInfo.setUserInfo(res))
+            .finally(profilePopup.renderLoading(false, 'Сохранить'))
     }
 }, 'profile-popup');
 
 const avatarPopup = new PopupWithForm({
     submit: (data) => {
-        userInfo.setUserInfo(data);
-        api.setUserAvatar(userInfo.getUserInfo())
+        avatarPopup.renderLoading(true)
+        api.setUserAvatar(data)
+            .then(res => userInfo.setUserInfo(res))
+            .finally(avatarPopup.renderLoading(false, 'Сохранить'))
     }
 }, 'avatar-popup');
 
@@ -111,8 +115,6 @@ imagePopup.setEventListeners();
 
 // Инициализация страницы
 api.gerUser()
-    .then(data => {
-        userInfo.setUserInfo(data);
-    })
+    .then(data => userInfo.setUserInfo(data))
 cards.render();
 setUpForms();
