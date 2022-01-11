@@ -2,7 +2,7 @@ import Card from '../components/Card.js';
 import Section from '../components/Section.js';
 import PopupWithImage from '../components/PopupWithImage.js';
 import PopupWithForm from '../components/PopupWithForm.js';
-import ConfirmPopup from '../components/ConfirmPopup.js';
+import PopupWithConfirmation from '../components/PopupWithConfirmation.js';
 import UserInfo from '../components/UserInfo.js';
 import FormValidator from '../components/FormValidator.js';
 import Api from '../components/Api.js';
@@ -41,9 +41,9 @@ function createCard(item) {
 
 // Основная логика
 export const api = new Api({
-    baseUrl: "https://mesto.nomoreparties.co/v1/cohort-16",
+    baseUrl: "https://mesto.nomoreparties.co/v1/cohort-34",
     headers: {
-        authorization: "e8e5e3a7-8ba0-46eb-8d27-e0f2fc68826d",
+        authorization: "dcd995c7-2c2d-4a8b-8d07-0386baa3ce28",
         'Content-Type': 'application/json'
     },
 });
@@ -61,7 +61,7 @@ const cards = new Section({
     }
 }, 'places');
 
-export const confirmPopup = new ConfirmPopup('confirm-popup');
+export const confirmPopup = new PopupWithConfirmation('confirm-popup');
 
 const imagePopup = new PopupWithImage('image-popup');
 
@@ -70,6 +70,7 @@ const placePopup = new PopupWithForm({
         placePopup.renderLoading(true);
         api.addCard(values)
             .then(res => cards.prependItem(createCard(res)))
+            .catch(res => console.log('Ошибка', res.status))
             .finally(placePopup.renderLoading(false, 'Создать'))
     }
 }, 'place-popup');
@@ -79,6 +80,7 @@ const profilePopup = new PopupWithForm({
         profilePopup.renderLoading(true);
         api.setUser(data)
             .then(res => userInfo.setUserInfo(res))
+            .catch(res => console.log('Ошибка', res.status))
             .finally(profilePopup.renderLoading(false, 'Сохранить'))
     }
 }, 'profile-popup');
@@ -88,6 +90,7 @@ const avatarPopup = new PopupWithForm({
         avatarPopup.renderLoading(true)
         api.setUserAvatar(data)
             .then(res => userInfo.setUserInfo(res))
+            .catch(res => console.log('Ошибка', res.status))
             .finally(avatarPopup.renderLoading(false, 'Сохранить'))
     }
 }, 'avatar-popup');
@@ -116,5 +119,6 @@ imagePopup.setEventListeners();
 // Инициализация страницы
 api.gerUser()
     .then(data => userInfo.setUserInfo(data))
+    .catch(res => console.log('Ошибка', res.status))
 cards.render();
 setUpForms();
