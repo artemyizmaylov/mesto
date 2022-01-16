@@ -19,6 +19,7 @@ export default class Api {
                 }
                 return Promise.reject(res);
             })
+            .catch(res => console.log('Ошибка: ', res.status))
     }
 
     gerUser() {

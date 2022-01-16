@@ -12,13 +12,12 @@ export default class Card {
         this._name = items.name;
         this._link = items.link;
         this._likes = items.likes;
-
         this._selector = selector;
-        this._handleCardClick = handleCardClick;
-        this._deleteHandler = this._deleteHandler.bind(this);
-
         this._id = items._id;
         this._owner = items.owner._id;
+
+        this._handleCardClick = handleCardClick;
+        this._deleteHandler = this._deleteHandler.bind(this);
     }
 
     _getTemplate() {
@@ -32,24 +31,29 @@ export default class Card {
     }
 
     _like() {
-        this._checkLike()
-
+        this._setLike()
         this._likeButton
             .classList
             .toggle(`${this._selector}__like-button_active`);
     }
 
-    _checkLike() {
+    _deleteLike() {
+        api.toogleLike(this._id, 'DELETE')
+            .then(res => this._likeCounter
+                .textContent = res.likes.length);
+    }
+
+    _putLike() {
+        api.toogleLike(this._id, 'PUT')
+            .then(res => this._likeCounter
+                .textContent = res.likes.length);
+    }
+
+    _setLike() {
         if (this._isLiked) {
-            api.toogleLike(this._id, 'DELETE')
-                .then(res => {
-                    this._likeCounter
-                        .textContent = res.likes.length;
-                })
+            this._deleteLike();
         } else {
-            api.toogleLike(this._id, 'PUT')
-                .then(res => this._likeCounter
-                    .textContent = res.likes.length);
+            this._putLike();
         }
         this._isLiked = !this._isLiked;
     }
@@ -100,6 +104,8 @@ export default class Card {
     create() {
         this._element = this._getTemplate();
 
+        this._elementName = this._element
+            .querySelector(`.${this._selector}__name`)
         this._trashButton = this._element
             .querySelector(`.${this._selector}__trash-button`);
         this._likeButton = this._element
@@ -109,14 +115,17 @@ export default class Card {
         this._likeCounter = this._element
             .querySelector(`.${this._selector}__like-count`);
 
-        this._element
-            .querySelector(`.${this._selector}__name`)
+        this._elementName
             .textContent = this._name;
         this._likeCounter
             .textContent = this._likes.length
 
         this._img.src = this._link;
         this._img.alt = this._name;
+
+        this._img.onerror = () => {
+            this._img.src = 'https://nsk.triproom.ru/photo/big/noimage.png'
+        }
 
         this._checkOwner();
         this._checkUserLikes();

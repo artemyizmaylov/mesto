@@ -54,24 +54,20 @@ export const userInfo = new UserInfo(
     'profile__avatar'
 );
 
-const cards = new Section({
-    items: api.getCards(),
-    renderer: (item) => {
-        cards.addItem(createCard(item))
-    }
-}, 'places');
+export const confirmPopup = new PopupWithConfirmation(
+    'confirm-popup'
+);
 
-export const confirmPopup = new PopupWithConfirmation('confirm-popup');
-
-const imagePopup = new PopupWithImage('image-popup');
+const imagePopup = new PopupWithImage(
+    'image-popup'
+);
 
 const placePopup = new PopupWithForm({
-    submit: (values) => {
+    submit: (data) => {
         placePopup.renderLoading(true);
-        api.addCard(values)
+        api.addCard(data)
             .then(res => cards.prependItem(createCard(res)))
-            .catch(res => console.log('Ошибка', res.status))
-            .finally(placePopup.renderLoading(false, 'Создать'))
+            .finally(placePopup.renderLoading(false))
     }
 }, 'place-popup');
 
@@ -80,8 +76,7 @@ const profilePopup = new PopupWithForm({
         profilePopup.renderLoading(true);
         api.setUser(data)
             .then(res => userInfo.setUserInfo(res))
-            .catch(res => console.log('Ошибка', res.status))
-            .finally(profilePopup.renderLoading(false, 'Сохранить'))
+            .finally(profilePopup.renderLoading(false))
     }
 }, 'profile-popup');
 
@@ -90,10 +85,16 @@ const avatarPopup = new PopupWithForm({
         avatarPopup.renderLoading(true)
         api.setUserAvatar(data)
             .then(res => userInfo.setUserInfo(res))
-            .catch(res => console.log('Ошибка', res.status))
-            .finally(avatarPopup.renderLoading(false, 'Сохранить'))
+            .finally(avatarPopup.renderLoading(false))
     }
 }, 'avatar-popup');
+
+const cards = new Section({
+    items: api.getCards(),
+    renderer: (item) => {
+        cards.addItem(createCard(item))
+    }
+}, 'places');
 
 // Слушатели
 editProfileButton.addEventListener('click', () => {
@@ -119,6 +120,6 @@ imagePopup.setEventListeners();
 // Инициализация страницы
 api.gerUser()
     .then(data => userInfo.setUserInfo(data))
-    .catch(res => console.log('Ошибка', res.status))
-cards.render();
+    .then(() => cards.render())
+
 setUpForms();
