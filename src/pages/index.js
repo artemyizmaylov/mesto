@@ -37,7 +37,18 @@ function createCard(item) {
     }, 'place');
 
     return cardElement.create();
-}
+};
+
+function createSection(data) {
+    const cards = new Section({
+        items: data,
+        renderer: (item) => {
+            cards.addItem(createCard(item))
+        }
+    }, 'places');
+
+    return cards;
+};
 
 // Основная логика
 export const api = new Api({
@@ -67,7 +78,7 @@ const placePopup = new PopupWithForm({
         placePopup.renderLoading(true);
         api.addCard(data)
             .then(res => cards.prependItem(createCard(res)))
-            .finally(placePopup.renderLoading(false))
+            .then(() => placePopup.renderLoading(false))
     }
 }, 'place-popup');
 
@@ -76,7 +87,7 @@ const profilePopup = new PopupWithForm({
         profilePopup.renderLoading(true);
         api.setUser(data)
             .then(res => userInfo.setUserInfo(res))
-            .finally(profilePopup.renderLoading(false))
+            .then(() => profilePopup.renderLoading(false))
     }
 }, 'profile-popup');
 
@@ -85,16 +96,11 @@ const avatarPopup = new PopupWithForm({
         avatarPopup.renderLoading(true)
         api.setUserAvatar(data)
             .then(res => userInfo.setUserInfo(res))
-            .finally(avatarPopup.renderLoading(false))
+            .then(() => avatarPopup.renderLoading(false))
     }
 }, 'avatar-popup');
 
-const cards = new Section({
-    items: api.getCards(),
-    renderer: (item) => {
-        cards.addItem(createCard(item))
-    }
-}, 'places');
+const cards = createSection();
 
 // Слушатели
 editProfileButton.addEventListener('click', () => {
@@ -110,7 +116,6 @@ editAvatarButton.addEventListener('click', () => {
     avatarPopup.open();
 })
 
-
 profilePopup.setEventListeners();
 placePopup.setEventListeners();
 avatarPopup.setEventListeners();
@@ -120,6 +125,10 @@ imagePopup.setEventListeners();
 // Инициализация страницы
 api.gerUser()
     .then(data => userInfo.setUserInfo(data))
-    .then(() => cards.render())
+    .then(() => {
+        api.getCards()
+            .then(data => createSection(data))
+            .then(section => section.render())
+    });
 
 setUpForms();

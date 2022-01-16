@@ -23,12 +23,9 @@ export default class Section {
 
     render() {
         this.clear();
+        this._items.forEach(item => {
+            this._renderer(item);
+        });
 
-        this._items
-            .then(res => {
-                res.forEach(item => {
-                    this._renderer(item);
-                });
-            })
     }
 }

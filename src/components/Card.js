@@ -118,13 +118,14 @@ export default class Card {
         this._elementName
             .textContent = this._name;
         this._likeCounter
-            .textContent = this._likes.length
+            .textContent = this._likes.length;
 
         this._img.src = this._link;
         this._img.alt = this._name;
 
         this._img.onerror = () => {
-            this._img.src = 'https://nsk.triproom.ru/photo/big/noimage.png'
+            this._img.src = 'https://nsk.triproom.ru/photo/big/noimage.png';
+            this._elementName.textContent = 'Ошибка';
         }
 
         this._checkOwner();
