@@ -118,7 +118,6 @@ const cards = new Section({
                     api.unlikeCard(card.getInfo()._id)
                         .then(res => card.renderLikes(res.likes))
                         .catch(res => console.log('Ошибка: ', res.status))
-
                 }
             },
 
