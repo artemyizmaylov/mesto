@@ -1,23 +1,24 @@
-import {
-    userInfo,
-    api,
-    confirmPopup
-} from "../pages/index.js"
-
 export default class Card {
     constructor({
         items,
-        handleCardClick
+        user,
+        handleCardClick,
+        handleLike,
+        handleDeleteCard,
     }, selector) {
         this._name = items.name;
         this._link = items.link;
         this._likes = items.likes;
-        this._selector = selector;
         this._id = items._id;
-        this._owner = items.owner._id;
+
+        this._owner = items.owner;
+        this._user = user;
+
+        this._selector = selector;
 
         this._handleCardClick = handleCardClick;
-        this._deleteHandler = this._deleteHandler.bind(this);
+        this._handleLike = handleLike
+        this._handleDeleteCard = handleDeleteCard;
     }
 
     _getTemplate() {
@@ -30,75 +31,60 @@ export default class Card {
         return cardElement;
     }
 
-    _like() {
-        this._setLike()
-        this._likeButton
-            .classList
-            .toggle(`${this._selector}__like-button_active`);
-    }
-
-    _deleteLike() {
-        api.toogleLike(this._id, 'DELETE')
-            .then(res => this._likeCounter
-                .textContent = res.likes.length);
-    }
-
-    _putLike() {
-        api.toogleLike(this._id, 'PUT')
-            .then(res => this._likeCounter
-                .textContent = res.likes.length);
-    }
-
-    _setLike() {
-        if (this._isLiked) {
-            this._deleteLike();
-        } else {
-            this._putLike();
-        }
-        this._isLiked = !this._isLiked;
-    }
-    _deleteHandler() {
-        api.deleteCard(this._id);
-        this._element.remove();
-    }
-
-    _delete() {
-        confirmPopup.open();
-        confirmPopup.confirm(this._deleteHandler);
+    _checkUserLike(array) {
+        return array.some(like => {
+            return like._id === this._user._id;
+        })
     }
 
     _checkOwner() {
-        if (userInfo.getUserInfo()._id !== this._owner) {
-            this._element.removeChild(this._trashButton)
+        if (this._user._id !== this._owner._id) {
+            this._element.removeChild(this._trashButton);
         }
-    }
-
-    _checkUserLikes() {
-        this._likes.forEach(user => {
-            if (user._id === userInfo.getUserInfo()._id) {
-                this._isLiked = true;
-                this._likeButton
-                    .classList
-                    .add(`${this._selector}__like-button_active`);
-            }
-        })
     }
 
     _setEventListeners() {
         this._likeButton
             .addEventListener('click', () => {
-                this._like();
+                this._handleLike(this);
             })
 
         this._trashButton
             .addEventListener('click', () => {
-                this._delete();
+                this._handleDeleteCard(this);
             })
 
         this._img
             .addEventListener('click', () => {
-                this._handleCardClick();
+                this._handleCardClick(this);
             })
+    }
+
+    getInfo() {
+        return {
+            element: this._element,
+            name: this._name,
+            link: this._link,
+            owner: this._owner,
+            _id: this._id
+        };
+    }
+
+    getElement() {
+        return this._element;
+    }
+
+    renderLikes(array) {
+        if (this._checkUserLike(array)) {
+            this.isLiked = true;
+            this._likeButton.classList.add('place__like-button_active');
+        } else {
+            this.isLiked = false;
+            this._likeButton.classList.remove('place__like-button_active');
+        }
+
+        this._likeCounter
+            .textContent = array.length;
     }
 
     create() {
@@ -117,20 +103,18 @@ export default class Card {
 
         this._elementName
             .textContent = this._name;
-        this._likeCounter
-            .textContent = this._likes.length;
 
         this._img.src = this._link;
         this._img.alt = this._name;
 
         this._img.onerror = () => {
             this._img.src = 'https://nsk.triproom.ru/photo/big/noimage.png';
-            this._elementName.textContent = 'Ошибка';
         }
 
         this._checkOwner();
-        this._checkUserLikes();
         this._setEventListeners();
+
+        this.renderLikes(this._likes);
 
         return this._element;
     }

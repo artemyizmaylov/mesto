@@ -19,11 +19,14 @@ export default class Api {
                 }
                 return Promise.reject(res);
             })
-            .catch(res => console.log('Ошибка: ', res.status))
     }
 
     gerUser() {
         return this._fetch('users/me', 'GET');
+    }
+
+    getCards() {
+        return this._fetch('cards', 'GET');
     }
 
     setUser(data) {
@@ -34,10 +37,6 @@ export default class Api {
         return this._fetch('users/me/avatar', 'PATCH', data);
     }
 
-    getCards() {
-        return this._fetch('cards', 'GET');
-    }
-
     addCard(data) {
         return this._fetch('cards', 'POST', data);
     }
@@ -46,7 +45,11 @@ export default class Api {
         return this._fetch(`cards/${cardId}`, 'DELETE');
     }
 
-    toogleLike(cardId, method) {
-        return this._fetch(`cards/${cardId}/likes`, method);
+    likeCard(cardId) {
+        return this._fetch(`cards/${cardId}/likes`, 'PUT');
+    }
+
+    unlikeCard(cardId) {
+        return this._fetch(`cards/${cardId}/likes`, 'DELETE');
     }
 }

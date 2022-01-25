@@ -11,8 +11,7 @@ export default class PopupWithConfirmation extends Popup {
     }
 
     _handleConfirm() {
-        this._confirmAction();
-        this.close();
+        this._confirmAction(this._element);
     }
 
     _handleEnterSubmit(evt) {
@@ -33,7 +32,8 @@ export default class PopupWithConfirmation extends Popup {
         document.removeEventListener('keydown', this._handleEnterSubmit);
     }
 
-    confirm(action) {
+    confirm(element, action) {
+        this._element = element
         this._confirmAction = action;
     }
 

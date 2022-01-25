@@ -23,13 +23,13 @@ export default class UserInfo {
         avatar,
         _id
     }) {
-        if (name, about) {
+        this._id = _id;
+        if (name && about) {
             this._name.textContent = name;
             this._about.textContent = about;
         }
         if (avatar) {
             this._avatar.src = avatar;
         }
-        this._id = _id;
     }
 }

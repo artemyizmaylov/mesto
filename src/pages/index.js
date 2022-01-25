@@ -25,30 +25,14 @@ function setUpForms() {
     });
 }
 
-function createCard(item) {
-    const cardElement = new Card({
-        items: item,
-        handleCardClick: () => {
-            imagePopup.open({
-                name: item.name,
-                link: item.link
-            });
-        }
-    }, 'place');
-
-    return cardElement.create();
-};
-
-function createSection(data) {
-    const cards = new Section({
-        items: data,
-        renderer: (item) => {
-            cards.addItem(createCard(item))
-        }
-    }, 'places');
-
-    return cards;
-};
+function deleteCard(card) {
+    api.deleteCard(card.getInfo()._id)
+        .then(() => {
+            confirmPopup.close();
+            card.getElement().remove();
+        })
+        .catch(res => console.log('Ошибка: ', res.status))
+}
 
 // Основная логика
 export const api = new Api({
@@ -77,8 +61,12 @@ const placePopup = new PopupWithForm({
     submit: (data) => {
         placePopup.renderLoading(true);
         api.addCard(data)
-            .then(res => cards.prependItem(createCard(res)))
-            .then(() => placePopup.renderLoading(false))
+            .then(res => {
+                cards.prependItem(res);
+                placePopup.close();
+            })
+            .catch(res => console.log('Ошибка: ', res.status))
+            .finally(() => placePopup.renderLoading(false))
     }
 }, 'place-popup');
 
@@ -86,8 +74,12 @@ const profilePopup = new PopupWithForm({
     submit: (data) => {
         profilePopup.renderLoading(true);
         api.setUser(data)
-            .then(res => userInfo.setUserInfo(res))
-            .then(() => profilePopup.renderLoading(false))
+            .then(res => {
+                userInfo.setUserInfo(res);
+                profilePopup.close();
+            })
+            .catch(res => console.log('Ошибка: ', res.status))
+            .finally(() => profilePopup.renderLoading(false))
     }
 }, 'profile-popup');
 
@@ -95,12 +87,51 @@ const avatarPopup = new PopupWithForm({
     submit: (data) => {
         avatarPopup.renderLoading(true)
         api.setUserAvatar(data)
-            .then(res => userInfo.setUserInfo(res))
-            .then(() => avatarPopup.renderLoading(false))
+            .then(res => {
+                userInfo.setUserInfo(res);
+                avatarPopup.close();
+            })
+            .catch(res => console.log('Ошибка: ', res.status))
+            .finally(() => avatarPopup.renderLoading(false))
     }
 }, 'avatar-popup');
 
-const cards = createSection();
+const cards = new Section({
+    renderer: (item) => {
+        const cardElement = new Card({
+            items: item,
+            user: userInfo.getUserInfo(),
+
+            handleCardClick: (card) => {
+                imagePopup.open({
+                    name: card.getInfo().name,
+                    link: card.getInfo().link
+                });
+            },
+
+            handleLike: (card) => {
+                if (!card.isLiked) {
+                    api.likeCard(card.getInfo()._id)
+                        .then(res => card.renderLikes(res.likes))
+                        .catch(res => console.log('Ошибка: ', res.status))
+                } else {
+                    api.unlikeCard(card.getInfo()._id)
+                        .then(res => card.renderLikes(res.likes))
+                        .catch(res => console.log('Ошибка: ', res.status))
+
+                }
+            },
+
+            handleDeleteCard: (card) => {
+                confirmPopup.open();
+                confirmPopup.confirm(card, deleteCard);
+            }
+
+        }, 'place');
+
+        return cardElement.create();
+    }
+}, 'places');
 
 // Слушатели
 editProfileButton.addEventListener('click', () => {
@@ -125,10 +156,9 @@ imagePopup.setEventListeners();
 // Инициализация страницы
 api.gerUser()
     .then(data => userInfo.setUserInfo(data))
-    .then(() => {
-        api.getCards()
-            .then(data => createSection(data))
-            .then(section => section.render())
-    });
+    .then(api.getCards()
+        .then(res => cards.renderItems(res))
+        .catch(res => console.log('Ошибка: ', res.status)))
+    .catch(res => console.log('Ошибка: ', res.status))
 
 setUpForms();
