@@ -21,7 +21,7 @@ export default class Api {
             })
     }
 
-    gerUser() {
+    getUser() {
         return this._fetch('users/me', 'GET');
     }
 

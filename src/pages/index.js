@@ -31,7 +31,10 @@ function deleteCard(card) {
             confirmPopup.close();
             card.getElement().remove();
         })
-        .catch(res => console.log('Ошибка: ', res.status))
+        .catch(res => {
+            res.json()
+                .then((err) => console.log(err.message))
+        })
 }
 
 // Основная логика
@@ -65,7 +68,10 @@ const placePopup = new PopupWithForm({
                 cards.prependItem(res);
                 placePopup.close();
             })
-            .catch(res => console.log('Ошибка: ', res.status))
+            .catch(res => {
+                res.json()
+                    .then((err) => console.log(err.message))
+            })
             .finally(() => placePopup.renderLoading(false))
     }
 }, 'place-popup');
@@ -78,7 +84,10 @@ const profilePopup = new PopupWithForm({
                 userInfo.setUserInfo(res);
                 profilePopup.close();
             })
-            .catch(res => console.log('Ошибка: ', res.status))
+            .catch(res => {
+                res.json()
+                    .then((err) => console.log(err.message))
+            })
             .finally(() => profilePopup.renderLoading(false))
     }
 }, 'profile-popup');
@@ -91,7 +100,10 @@ const avatarPopup = new PopupWithForm({
                 userInfo.setUserInfo(res);
                 avatarPopup.close();
             })
-            .catch(res => console.log('Ошибка: ', res.status))
+            .catch(res => {
+                res.json()
+                    .then((err) => console.log(err.message))
+            })
             .finally(() => avatarPopup.renderLoading(false))
     }
 }, 'avatar-popup');
@@ -113,11 +125,17 @@ const cards = new Section({
                 if (!card.isLiked) {
                     api.likeCard(card.getInfo()._id)
                         .then(res => card.renderLikes(res.likes))
-                        .catch(res => console.log('Ошибка: ', res.status))
+                        .catch(res => {
+                            res.json()
+                                .then((err) => console.log(err.message))
+                        })
                 } else {
                     api.unlikeCard(card.getInfo()._id)
                         .then(res => card.renderLikes(res.likes))
-                        .catch(res => console.log('Ошибка: ', res.status))
+                        .catch(res => {
+                            res.json()
+                                .then((err) => console.log(err.message))
+                        })
                 }
             },
 
@@ -153,11 +171,14 @@ confirmPopup.setEventListeners();
 imagePopup.setEventListeners();
 
 // Инициализация страницы
-api.gerUser()
-    .then(data => userInfo.setUserInfo(data))
-    .then(api.getCards()
-        .then(res => cards.renderItems(res))
-        .catch(res => console.log('Ошибка: ', res.status)))
-    .catch(res => console.log('Ошибка: ', res.status))
+Promise.all([api.getUser(), api.getCards()])
+    .then(([userResponse, cardsResponse]) => {
+        userInfo.setUserInfo(userResponse);
+        cards.renderItems(cardsResponse)
+    })
+    .catch(res => {
+        res.json()
+            .then((err) => console.log(err.message))
+    })
 
 setUpForms();
