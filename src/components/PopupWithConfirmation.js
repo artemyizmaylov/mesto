@@ -1,44 +1,43 @@
-import Popup from "./Popup.js";
+import Popup from './Popup.js';
 
 export default class PopupWithConfirmation extends Popup {
-    constructor(selector) {
-        super(selector);
-        this._confirmButton = this._popup
-            .querySelector('.popup__confirm-button');
+  constructor(selector) {
+    super(selector);
+    this._confirmButton = this._popup.querySelector('.popup__confirm-button');
 
-        this._handleConfirm = this._handleConfirm.bind(this);
-        this._handleEnterSubmit = this._handleEnterSubmit.bind(this);
+    this._handleConfirm = this._handleConfirm.bind(this);
+    this._handleEnterSubmit = this._handleEnterSubmit.bind(this);
+  }
+
+  _handleConfirm() {
+    this._confirmAction(this._element);
+  }
+
+  _handleEnterSubmit(evt) {
+    if (evt.key === 'Enter') {
+      this._handleConfirm();
     }
+  }
 
-    _handleConfirm() {
-        this._confirmAction(this._element);
-    }
+  open() {
+    super.open();
 
-    _handleEnterSubmit(evt) {
-        if (evt.key === 'Enter') {
-            this._handleConfirm();
-        }
-    }
+    document.addEventListener('keydown', this._handleEnterSubmit);
+  }
 
-    open() {
-        super.open();
+  close() {
+    super.close();
 
-        document.addEventListener('keydown', this._handleEnterSubmit);
-    }
+    document.removeEventListener('keydown', this._handleEnterSubmit);
+  }
 
-    close() {
-        super.close();
+  confirm(element, action) {
+    this._element = element;
+    this._confirmAction = action;
+  }
 
-        document.removeEventListener('keydown', this._handleEnterSubmit);
-    }
-
-    confirm(element, action) {
-        this._element = element
-        this._confirmAction = action;
-    }
-
-    setEventListeners() {
-        super.setEventListeners();
-        this._confirmButton.addEventListener('click', this._handleConfirm);
-    }
+  setEventListeners() {
+    super.setEventListeners();
+    this._confirmButton.addEventListener('click', this._handleConfirm);
+  }
 }
